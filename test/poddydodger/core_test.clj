@@ -1,6 +1,6 @@
-(ns poddydodger.core-test
+(ns poddodger.core-test
   (:require [clojure.test :refer :all]
-            [poddydodger.core :refer :all]))
+            [poddodger.core :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."

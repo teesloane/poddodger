@@ -1,10 +1,10 @@
 ;; (set! *warn-on-reflection* true)
 
-(ns poddydodger.core
+(ns poddodger.core
   (:require [clojure.java.io :as io]
             [clojure.string :as string]
             #_[feedparser-clj.core :as rss]
-            [poddydodger.feed-parser :as rss])
+            [poddodger.feed-parser :as rss])
 
   (:gen-class))
 

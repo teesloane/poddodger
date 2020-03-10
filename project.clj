@@ -1,4 +1,4 @@
-(defproject poddydodger "0.1.0-SNAPSHOT"
+(defproject poddodger "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
@@ -9,7 +9,7 @@
                  [net.java.dev.rome/rome "1.0.0"]
                  [progress "1.0.2"]]
 
-  :native-image {:name      "poddydodger" ;; name of output image, optional
+  :native-image {:name      "poddodger" ;; name of output image, optional
                  :graal-bin "/Users/tees/Downloads/graalvm-ce-java11-20.0.0/Contents/Home/bin/native-image" ;; path to GraalVM home, optional
                  :opts     ["--report-unsupported-elements-at-runtime"
                             "--initialize-at-build-time"
@@ -26,6 +26,6 @@
 
   :plugins [[io.taylorwood/lein-native-image "0.3.1"]]
 
-  :main ^:skip-aot poddydodger.core
+  :main ^:skip-aot poddodger.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

@@ -1,6 +1,6 @@
 (set! *warn-on-reflection* true)
 
-(ns poddydodger.feed-parser
+(ns poddodger.feed-parser
   (:import [com.sun.syndication.io SyndFeedInput XmlReader]
            [java.net URL]
            [java.io InputStreamReader]
