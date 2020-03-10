@@ -18,10 +18,12 @@
                             ;; "-H:+PrintAnalysisCallTree" ;; < for finding deps / things that are reflected.
                             "--no-server"
                             "-H:EnableURLProtocols=https"
-                            "-H:ReflectionConfigurationFiles=reflect-config.json"]}
-                           
+                            ;; "-H:ReflectionConfigurationFiles=reflect-config.json"
+                            ]}
 
-                
+
+
+
   :plugins [[io.taylorwood/lein-native-image "0.3.1"]]
 
   :main ^:skip-aot poddydodger.core
