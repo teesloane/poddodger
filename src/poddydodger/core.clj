@@ -1,8 +1,11 @@
+;; (set! *warn-on-reflection* true)
+
 (ns poddydodger.core
   (:require [clojure.java.io :as io]
+            [clojure.xml :as xml]
             [clojure.string :as string]
-            [feedparser-clj.core :as rss]
-            [progress.file :as progress])
+            [feedparser-clj.core :as rss])
+
   (:gen-class))
 
 (def config
@@ -13,6 +16,12 @@
    :curr-file    {:name  nil
                   :url   nil}})
 
+(defn setup
+  "Make directory at config out-dir"
+  [^String path]
+  (.mkdir (java.io.File. path)))
+
+
 (defn write-file-name
   [{:keys [out-dir]} ep-title]
   (str out-dir ep-title ".mp3"))
@@ -22,16 +31,18 @@
   (if (.exists (io/file file))
     (do
       (println "File: <" ep-title "> already exists.")
-      (println "If you want to re-downoad it, you will need to delete the file manually. \n")
+      (println "If you want to re-download it, you will need to delete the file manually. \n")
       true)
     false))
 
 (defn get-rss-feed!
   [rss-feed]
+
+  (println "Trying to fetch rss feed!")
   (try
     (rss/parse-feed rss-feed)
     (catch
-        Exception e (println "Error! RSS Feed may not be valid. Could not download any podcasts.")
+        Exception e (println "Error! RSS Feed may not be valid. Could not download any podcasts." e)
         (System/exit 1))))
 
 (defn download-uri
@@ -39,11 +50,11 @@
   [cfg ep-title url]
   (let [file (write-file-name cfg ep-title)]
     (when-not (or (file-exists? file ep-title) (nil? url))
-      (progress/with-file-progress file
-        (with-open [in  (io/input-stream url)
-                    out (io/output-stream file)]
-          (println "Downloading " ep-title)
-          (io/copy in out))))))
+      ;; (progress/with-file-progress file
+      (with-open [in  (io/input-stream url)
+                  out (io/output-stream file)]
+        (println "Downloading " ep-title)
+        (io/copy in out)))))
 
 (defn get-episodes
   "Fetches episodes from an RSS feed and loops over them to download each."
@@ -65,6 +76,7 @@
   ""
   [& args]
   (let [c (assoc config :feed (first args))]
+    (setup (config :out-dir))
     (get-episodes c)))
 
 ;; (get-episodes "https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/2f221518-53f6-4aaa-b3eb-aa86015d7469/fa6139ac-7f87-4d72-98e1-aa86015d7477/podcast.rss"))
