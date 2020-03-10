@@ -5,6 +5,8 @@
             :url  "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojars.scsibug/feedparser-clj "0.4.0"]
                  [org.clojure/clojure "1.9.0"]
+                 [org.jdom/jdom2 "2.0.6"]
+                 [net.java.dev.rome/rome "1.0.0"]
                  [progress "1.0.2"]]
 
   :native-image {:name      "poddydodger" ;; name of output image, optional

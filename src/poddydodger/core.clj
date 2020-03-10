@@ -2,9 +2,9 @@
 
 (ns poddydodger.core
   (:require [clojure.java.io :as io]
-            [clojure.xml :as xml]
             [clojure.string :as string]
-            [feedparser-clj.core :as rss])
+            #_[feedparser-clj.core :as rss]
+            [poddydodger.feed-parser :as rss])
 
   (:gen-class))
 
@@ -60,17 +60,14 @@
   "Fetches episodes from an RSS feed and loops over them to download each."
   [{:keys [feed] :as cfg}]
   (let [fetch        (get-rss-feed! feed)
-        eps          (fetch :entries)
-        out-name     #(str (:out-dir config) % ".mp3")
-        get-ep-url   #(-> % :enclosures first :url)
-        get-ep-title #(-> % :title)
-        cfg (assoc cfg :episodes eps :total-count (count eps))]
+        eps          (get fetch :entries)
+        cfg          (assoc cfg :episodes eps :total-count (count eps))]
 
     (println "Downloading" (cfg :total-count) "episodes. This could take a while. \n")
-    (doseq [ep eps
-            :let [url (-> ep :enclosures first :url)
-                  ep-name (ep :title)]]
-      (download-uri cfg (get-ep-title ep) (get-ep-url ep)))))
+    (doseq [ep   eps
+            :let [url     (-> ep (:enclosures) (first) (:url))
+                  ep-name (:title ep)]]
+      (download-uri cfg ep-name url))))
 
 (defn -main
   ""
@@ -79,4 +76,3 @@
     (setup (config :out-dir))
     (get-episodes c)))
 
-;; (get-episodes "https://www.omnycontent.com/d/playlist/aaea4e69-af51-495e-afc9-a9760146922b/2f221518-53f6-4aaa-b3eb-aa86015d7469/fa6139ac-7f87-4d72-98e1-aa86015d7477/podcast.rss"))

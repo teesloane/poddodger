@@ -27,7 +27,6 @@
         "allPublicFields": true,
         "allPublicMethods": true
     },
-
     {
         "name": "com.sun.syndication.io.WireFeedInput",
         "allDeclaredConstructors": true,
