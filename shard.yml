@@ -1,0 +1,19 @@
+name: poddodger
+version: 0.1.0
+
+authors:
+  - teesloane <tylersloane@gmail.com>
+
+targets:
+  poddodger:
+    main: src/poddodger.cr
+
+crystal: 0.34.0
+
+dependencies:
+  halite:
+    github: icyleaf/halite
+  term-spinner:
+    github: crystal-term/spinner
+
+license: MIT
