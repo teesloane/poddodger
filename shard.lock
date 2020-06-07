@@ -1,0 +1,14 @@
+version: 1.0
+shards:
+  halite:
+    github: icyleaf/halite
+    version: 0.10.5
+
+  term-cursor:
+    github: crystal-term/cursor
+    commit: 8805d5f686d153db92cf2ce3333433f8ed3708d0
+
+  term-spinner:
+    github: crystal-term/spinner
+    commit: 60350f9598335c559a8350d98fb2b9042e53290f
+
