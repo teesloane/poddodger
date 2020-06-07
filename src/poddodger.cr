@@ -105,7 +105,7 @@ OptionParser.parse() do |parser|
 
   parser.separator
 
-  parser.invalid_option { |flag| parser_err(parser, "#{flag} is not a valid flag.") }
+  parser.invalid_option { |flag| parser_err(parser, "#{flag} is not a valid flag") }
   parser.missing_option { |flag| parser_err(parser, "#{flag} is missing an option") }
 
   if ARGV.empty?

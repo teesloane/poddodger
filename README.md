@@ -1,27 +1,29 @@
-# poddodger
+> poddy dodger | ˈpɒdɪdɒdʒə | > noun Australian
+>
+> a person who steals unbranded cattle:  
+> "the cattle were forced onto the hills, where they were easy picking for the old poddy dodger."
 
-TODO: Write a description here
+# Pod-Dodger
+
+Pod-Dodger is an command line tool for batch downloading podcast episodes.
+Useful for long road-trips and extended periods of non-internet life.
 
 ## Installation
 
-TODO: Write installation instructions here
+Head to the releases page and download a binary for your system.
 
-## Usage
+``` sh
+Usage: poddodger [arguments]
 
-TODO: Write usage instructions here
+    -f, --feed string                URL of podcast rss feed
+    -d, --dir string                 Directory to save files to.
+    -o, --overwrite                  Overwrite existing files
+    -h, --help                       Show this help
+```
 
 ## Development
 
-TODO: Write development instructions here
+1. Clone the repo.
+2. Run `make setup`
+3. Run `make compile` to make sure things are working.
 
-## Contributing
-
-1. Fork it (<https://github.com/your-github-user/poddodger/fork>)
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
-
-## Contributors
-
-- [teesloane](https://github.com/your-github-user) - creator and maintainer
