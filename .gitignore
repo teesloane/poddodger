@@ -17,4 +17,5 @@ pom.xml.asc
 
 
 lib
-build/*
+build/poddodger
+build/poddodger.dwarf
