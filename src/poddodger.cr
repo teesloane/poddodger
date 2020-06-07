@@ -4,15 +4,20 @@ require "option_parser"
 require "term-spinner"
 
 class Pododger
-  property :feed_url, :out_dir
+  property :feed_url, :out_dir, :overwrite
+  getter :num_downloaded
 
   @feed_url = String
   @out_dir = String # should this be <String?> or <String> if user doesn't pass in -d to change out_dir ... I don't know.
+  @overwrite = Bool
   @mp3s = [] of Hash(String, String)
+  @num_downloaded = Int16
 
   def initialize
-    @out_dir = nil # shouldn't this make
+    @out_dir = nil
     @feed_url = "" # should be nilable?
+    @overwrite = false
+    @num_downloaded = 0
   end
 
   def download
@@ -25,19 +30,29 @@ class Pododger
   end
 
   def save_file(mp3)
-    spinner = Term::Spinner.new("[:spinner] Fetching: #{mp3["title"][(0..64)]} ...", format: :dots)
-    spinner.auto_spin
-    cleaned_title = mp3["title"].gsub("/", "-") # replace problem chars.
-    resp = Halite.follow.get("#{mp3["url"]}")
+    file_name = mp3["title"].gsub("/", "-") # replace problem chars.
 
     if @out_dir
-      file_path = "#{@out_dir}/#{cleaned_title}.mp3"
+      file_path = "#{@out_dir}/#{file_name}.mp3"
     else
-      file_path = "#{cleaned_title}.mp3"
+      file_path = "#{file_name}.mp3"
     end
 
+    if File.exists?(file_path) && !@overwrite
+      puts "File: #{file_name[(0..32)]}... already exists. Use '-o' flag to overwrite.."
+      return
+    end
+
+    spinner = Term::Spinner.new("[:spinner] Fetching: #{file_name[(0..64)]} ...", format: :dots)
+    spinner.auto_spin
+    resp = Halite.follow.get("#{mp3["url"]}")
     File.write(file_path, resp.body)
+
     spinner.success("Done!")
+  end
+
+  def inc_num_downloaded
+    @num_downloaded += 1
   end
 
   def get_mp3s_from_xml
@@ -65,6 +80,12 @@ end
 
 pod = Pododger.new
 
+def parser_err(parser, err)
+  STDERR.puts "ERROR: #{err}"
+  STDERR.puts parser
+  exit(1)
+end
+
 OptionParser.parse() do |parser|
   parser.banner = "Usage: poddodger [arguments]"
   parser.separator
@@ -79,16 +100,13 @@ OptionParser.parse() do |parser|
     pod.out_dir = dir
   end
 
+  parser.on("-o", "--overwrite", "Overwrite existing files") { pod.overwrite = true }
   parser.on("-h", "--help", "Show this help") { puts parser; exit }
+
   parser.separator
 
-  # Parser Error Handling
-
-  parser.invalid_option do |flag|
-    STDERR.puts "ERROR: #{flag} is not a valid option."
-    STDERR.puts parser
-    exit(1)
-  end
+  parser.invalid_option { |flag| parser_err(parser, "#{flag} is not a valid flag.") }
+  parser.missing_option { |flag| parser_err(parser, "#{flag} is missing an option") }
 
   if ARGV.empty?
     puts parser
@@ -96,11 +114,11 @@ OptionParser.parse() do |parser|
   end
 
   # if the first ARGV isn't one of the valid commans, throw an error.
-  if ARGV.empty? || !["-f", "-h", "-d", "--feed", "--help", "--dir"].includes? ARGV.first
-    STDERR.puts "ERROR: '#{ARGV.first}' is not a valid option."
-    STDERR.puts parser
-    exit(1)
+  if !["-f", "-h", "-d", "--feed", "--help", "--dir"].includes? ARGV.first
+    parser_err(parser, "#{ARGV.first} is not a valid option.")
   end
 end
 
 pod.download
+
+puts "\nDownloaded #{pod.num_downloaded} podcast episodes."
