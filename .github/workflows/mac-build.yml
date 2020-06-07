@@ -16,6 +16,8 @@ jobs:
         brew install crystal
     - name: Install dependencies
       run: shards install
+    - name: compile
+      run: make compile
     - uses: actions/upload-artifact@v1
       with:
         name: poddodger-mac
